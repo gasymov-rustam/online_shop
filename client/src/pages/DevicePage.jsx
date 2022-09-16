@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import { Button, Card, Col, Container, Image, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import bigStar from "../assets/bigStar.png";
+import { fetchOneDevice } from "../http";
 
 export const DevicePage = () => {
   const [device, setDevice] = useState({ info: [] });
   const { id } = useParams();
 
-  // useEffect(() => {
-  //   fetchOneDevice(id).then((data) => setDevice(data));
-  // }, []);
+  useEffect(() => {
+    fetchOneDevice(id).then((data) => setDevice(data));
+  }, [id]);
 
   return (
     <Container className="mt-3">

@@ -2,7 +2,7 @@ import { useUserContext } from "../";
 import { observer } from "mobx-react-lite";
 import { Card, Row } from "react-bootstrap";
 
-export const BrandBar = () => {
+export const BrandBar = observer(() => {
   const { device } = useUserContext();
 
   return (
@@ -20,4 +20,4 @@ export const BrandBar = () => {
       ))}
     </Row>
   );
-};
+});

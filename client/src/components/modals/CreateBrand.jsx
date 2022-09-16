@@ -1,19 +1,20 @@
 import { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
+import { createBrand } from "../../http";
 
 export const CreateBrand = ({ show, onHide }) => {
   const [value, setValue] = useState("");
 
-  //   const addBrand = () => {
-  //     createBrand({ name: value }).then((data) => {
-  //       setValue("");
-  //       onHide();
-  //     });
-  //   };
+  const addBrand = () => {
+    createBrand({ name: value }).then((data) => {
+      setValue("");
+      onHide();
+    });
+  };
 
   return (
     <Modal show={show} onHide={onHide} centered>
-      <Modal.Header closeButton>
+      <Modal.Header>
         <Modal.Title id="contained-modal-title-vcenter">Add brand</Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -26,12 +27,12 @@ export const CreateBrand = ({ show, onHide }) => {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        {/* <Button variant="outline-danger" onClick={onHide}>
+        <Button variant="outline-danger" onClick={onHide}>
           Close
         </Button>
         <Button variant="outline-success" onClick={addBrand}>
           Add
-        </Button> */}
+        </Button>
       </Modal.Footer>
     </Modal>
   );

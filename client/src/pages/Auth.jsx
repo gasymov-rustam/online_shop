@@ -4,8 +4,9 @@ import { NavLink, useLocation, useHistory } from "react-router-dom";
 import { LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE } from "../utils";
 import { observer } from "mobx-react-lite";
 import { useUserContext } from "..";
+import { login, registration } from "../http";
 
-export const Auth = () => {
+export const Auth = observer(() => {
   const { user } = useUserContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,21 +14,22 @@ export const Auth = () => {
   const history = useHistory();
   const isLogin = location.pathname === LOGIN_ROUTE;
 
-  // const click = async () => {
-  //   try {
-  //     let data;
-  //     if (isLogin) {
-  //       data = await login(email, password);
-  //     } else {
-  //       data = await registration(email, password);
-  //     }
-  //     user.setUser(user);
-  //     user.setIsAuth(true);
-  //     history.push(SHOP_ROUTE);
-  //   } catch (e) {
-  //     alert(e.response.data.message);
-  //   }
-  // };
+  const click = async () => {
+    try {
+      let data;
+      if (isLogin) {
+        data = await login(email, password);
+      } else {
+        data = await registration(email, password);
+      }
+
+      user.setUser(data);
+      user.setIsAuth(true);
+      history.push(SHOP_ROUTE);
+    } catch (e) {
+      alert(e.response.data.message);
+    }
+  };
 
   return (
     <Container
@@ -60,10 +62,12 @@ export const Auth = () => {
                 Do you have account? <NavLink to={LOGIN_ROUTE}>Sign In!</NavLink>
               </div>
             )}
-            <Button variant="outline-success">{isLogin ? "Sign In" : "Sign Up"}</Button>
+            <Button variant="outline-success" onClick={click}>
+              {isLogin ? "Sign In" : "Sign Up"}
+            </Button>
           </Row>
         </Form>
       </Card>
     </Container>
   );
-};
+});

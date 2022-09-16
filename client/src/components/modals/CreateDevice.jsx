@@ -1,8 +1,10 @@
+import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Dropdown, Form, Modal, Row } from "react-bootstrap";
 import { useUserContext } from "../../";
+import { createDevice, fetchBrands, fetchTypes } from "../../http";
 
-export const CreateDevice = ({ show, onHide }) => {
+export const CreateDevice = observer(({ show, onHide }) => {
   const { device } = useUserContext();
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
@@ -10,9 +12,9 @@ export const CreateDevice = ({ show, onHide }) => {
   const [info, setInfo] = useState([]);
 
   useEffect(() => {
-    // fetchTypes().then((data) => device.setTypes(data));
-    // fetchBrands().then((data) => device.setBrands(data));
-  }, []);
+    fetchTypes().then((data) => device.setTypes(data));
+    fetchBrands().then((data) => device.setBrands(data));
+  }, [device]);
 
   const addInfo = () => {
     setInfo([...info, { title: "", description: "", number: Date.now() }]);
@@ -38,7 +40,7 @@ export const CreateDevice = ({ show, onHide }) => {
     formData.append("brandId", device.selectedBrand.id);
     formData.append("typeId", device.selectedType.id);
     formData.append("info", JSON.stringify(info));
-    // createDevice(formData).then((data) => onHide());
+    createDevice(formData).then((data) => onHide());
   };
 
   return (
@@ -75,7 +77,7 @@ export const CreateDevice = ({ show, onHide }) => {
             placeholder="Enter name of device"
           />
           <Form.Control
-            value={price}
+            value={price === 0 ? "" : price}
             onChange={(e) => setPrice(Number(e.target.value))}
             className="mt-3"
             placeholder="Enter price of device"
@@ -85,7 +87,7 @@ export const CreateDevice = ({ show, onHide }) => {
           <hr />
 
           <Button variant="outline-dark" onClick={addInfo}>
-            Add new device
+            Add property about new device
           </Button>
 
           {info.map((i) => (
@@ -94,14 +96,14 @@ export const CreateDevice = ({ show, onHide }) => {
                 <Form.Control
                   value={i.title}
                   onChange={(e) => changeInfo("title", e.target.value, i.number)}
-                  placeholder="Enter name of property"
+                  placeholder="Enter property"
                 />
               </Col>
               <Col md={4}>
                 <Form.Control
                   value={i.description}
                   onChange={(e) => changeInfo("description", e.target.value, i.number)}
-                  placeholder="Enter description of property"
+                  placeholder="Enter description"
                 />
               </Col>
               <Col md={4}>
@@ -123,4 +125,4 @@ export const CreateDevice = ({ show, onHide }) => {
       </Modal.Footer>
     </Modal>
   );
-};
+});
